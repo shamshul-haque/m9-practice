@@ -1,6 +1,7 @@
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
+  TwitterAuthProvider,
   getAuth,
   signInWithPopup,
   signOut,
@@ -14,6 +15,7 @@ const Login = () => {
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   const gitHubProvider = new GithubAuthProvider();
+  const twitterProvider = new TwitterAuthProvider();
 
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, googleProvider)
@@ -28,6 +30,17 @@ const Login = () => {
 
   const handleGitHubSignIn = () => {
     signInWithPopup(auth, gitHubProvider)
+      .then((result) => {
+        const loggedInUser = result.user;
+        setUser(loggedInUser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleTwitterSignIn = () => {
+    signInWithPopup(auth, twitterProvider)
       .then((result) => {
         const loggedInUser = result.user;
         setUser(loggedInUser);
@@ -67,15 +80,21 @@ const Login = () => {
         <>
           <button
             onClick={handleGoogleSignIn}
-            style={{ marginTop: "10px", cursor: "pointer" }}
+            style={{ margin: "10px", cursor: "pointer" }}
           >
-            Sign with Google
+            Sign In with Google
           </button>
           <button
             onClick={handleGitHubSignIn}
-            style={{ marginTop: "10px", cursor: "pointer" }}
+            style={{ margin: "10px", cursor: "pointer" }}
           >
-            Sign with GitHub
+            Sign In with GitHub
+          </button>
+          <button
+            onClick={handleTwitterSignIn}
+            style={{ margin: "10px", cursor: "pointer" }}
+          >
+            Sign In with Tweeter
           </button>
         </>
       )}
