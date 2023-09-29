@@ -1,16 +1,45 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import { useState } from "react";
 import app from "../../firebase/firebase.init";
 
 const Login = () => {
-  const auth = getAuth(app);
-  console.log(app);
-  const provider = new GoogleAuthProvider();
+  const [user, setUser] = useState(null);
 
-  const handleGoogleSigning = () => {
-    signInWithPopup(auth, provider)
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  const gitHubProvider = new GoogleAuthProvider();
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, googleProvider)
       .then((result) => {
-        const user = result.user;
-        console.log(user);
+        const loggedInUser = result.user;
+        setUser(loggedInUser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleGitHubSignIn = () => {
+    signInWithPopup(auth, gitHubProvider)
+      .then((result) => {
+        const loggedInUser = result.user;
+        setUser(loggedInUser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setUser(null);
       })
       .catch((error) => {
         console.log(error);
@@ -19,12 +48,36 @@ const Login = () => {
 
   return (
     <div>
-      <button
-        onClick={handleGoogleSigning}
-        style={{ marginTop: "10px", cursor: "pointer" }}
-      >
-        Google Login
-      </button>
+      {user && (
+        <div>
+          <h3>User: {user.displayName}</h3>
+          <p>{user.email}</p>
+          <img src={user.photoURL} alt="" />
+        </div>
+      )}
+      {user ? (
+        <button
+          onClick={handleSignOut}
+          style={{ marginTop: "10px", cursor: "pointer" }}
+        >
+          Sign Out
+        </button>
+      ) : (
+        <>
+          <button
+            onClick={handleGoogleSignIn}
+            style={{ marginTop: "10px", cursor: "pointer" }}
+          >
+            Sign with Google
+          </button>
+          <button
+            onClick={handleGitHubSignIn}
+            style={{ marginTop: "10px", cursor: "pointer" }}
+          >
+            Sign with GitHub
+          </button>
+        </>
+      )}
     </div>
   );
 };
