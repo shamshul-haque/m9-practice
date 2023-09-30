@@ -30,7 +30,8 @@ const Register = () => {
 
     // create user
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((res) => {
+        console.log(res.user);
         setRegisterSuccess("User created successfully!");
       })
       .catch((error) => {
