@@ -1,19 +1,29 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 import auth from "../../firebase/firebase.config";
 
 const Login = () => {
+  const [loginSuccess, setLoginSuccess] = useState("");
+  const [loginError, setLoginError] = useState("");
+
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    // validation to check the user is authentic user or not
+    // reset success and error state
+    setLoginSuccess("");
+    setLoginError("");
+
+    // authenticate user
     signInWithEmailAndPassword(auth, email, password)
       .then((res) => {
         console.log(res.user);
+        setLoginSuccess("Login successfully!");
       })
       .catch((error) => {
         console.log(error);
+        setLoginError(error.message);
       });
   };
 
@@ -62,6 +72,12 @@ const Login = () => {
                 <button className="btn btn-primary">Login</button>
               </div>
             </form>
+            <div>
+              {loginSuccess && (
+                <p className="text-green-500 p-3">{loginSuccess}</p>
+              )}
+              {loginError && <p className="text-red-500 p-3">{loginError}</p>}
+            </div>
           </div>
         </div>
       </div>
