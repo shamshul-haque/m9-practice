@@ -24,6 +24,7 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         if (result.user.emailVerified) {
+          console.log(result.user);
           setLoginSuccess("Login successfully!");
         } else {
           alert("Please verify your email");
@@ -81,6 +82,7 @@ const Login = () => {
                   ref={emailRef}
                   placeholder="email"
                   className="input input-bordered"
+                  required
                 />
               </div>
               <div className="form-control">
@@ -92,6 +94,7 @@ const Login = () => {
                   name="password"
                   placeholder="password"
                   className="input input-bordered"
+                  required
                 />
                 <label className="label">
                   <Link
