@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { Link } from "react-router-dom";
@@ -31,8 +34,13 @@ const Register = () => {
 
     // create user
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((result) => {
         setRegisterSuccess("User created successfully!");
+
+        // send verification email
+        sendEmailVerification(result.user).then(() => {
+          alert("Please verify your email");
+        });
       })
       .catch((error) => {
         setRegisterError(error.message);
@@ -93,7 +101,7 @@ const Register = () => {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Login</button>
+                <button className="btn btn-primary">Register</button>
               </div>
             </form>
             <div>

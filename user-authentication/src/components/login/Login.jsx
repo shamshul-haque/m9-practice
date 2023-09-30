@@ -22,9 +22,12 @@ const Login = () => {
 
     // authenticate user
     signInWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        console.log(res.user);
-        setLoginSuccess("Login successfully!");
+      .then((result) => {
+        if (result.user.emailVerified) {
+          setLoginSuccess("Login successfully!");
+        } else {
+          alert("Please verify your email");
+        }
       })
       .catch((error) => {
         console.log(error);
