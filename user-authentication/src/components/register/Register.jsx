@@ -1,22 +1,30 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 import auth from "../../firebase/firebase.config";
 
 const Register = () => {
   const [registerSuccess, setRegisterSuccess] = useState("");
   const [registerError, setRegisterError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegistration = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    // reset error
+    // reset success and error state
     setRegisterSuccess("");
     setRegisterError("");
 
-    if (password.length < 6) {
-      setRegisterError("Password Should Be At Least 6 Character!");
+    // created validation for different cases
+    if (password.length < 8) {
+      setRegisterError("Password should be at least eight characters!");
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      setRegisterError(
+        "Password should have at least one uppercase character!"
+      );
       return;
     }
 
@@ -59,22 +67,23 @@ const Register = () => {
                   required
                 />
               </div>
-              <div className="form-control">
+              <div className="form-control relative">
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="password"
                   className="input input-bordered"
                   required
                 />
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-[13px] top-[52px]"
+                >
+                  {showPassword ? <BsEye /> : <BsEyeSlash />}
+                </span>
               </div>
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
