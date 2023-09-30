@@ -1,10 +1,15 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import auth from "../../firebase/firebase.config";
 
 const Login = () => {
   const [loginSuccess, setLoginSuccess] = useState("");
   const [loginError, setLoginError] = useState("");
+  const emailRef = useRef(null);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -24,6 +29,28 @@ const Login = () => {
       .catch((error) => {
         console.log(error);
         setLoginError(error.message);
+      });
+  };
+
+  const handleForgetPassword = () => {
+    const email = emailRef.current.value;
+    if (!email) {
+      console.log("please provide an email");
+      return;
+    } else if (
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+    ) {
+      console.log("please write a valid email");
+      return;
+    }
+
+    // send validation email
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("please check your email");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -48,6 +75,7 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
+                  ref={emailRef}
                   placeholder="email"
                   className="input input-bordered"
                 />
@@ -63,9 +91,13 @@ const Login = () => {
                   className="input input-bordered"
                 />
                 <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
+                  <Link
+                    to="#"
+                    onClick={handleForgetPassword}
+                    className="label-text-alt link link-hover"
+                  >
                     Forgot password?
-                  </a>
+                  </Link>
                 </label>
               </div>
               <div className="form-control mt-6">
@@ -77,6 +109,12 @@ const Login = () => {
                 <p className="text-green-500 p-3">{loginSuccess}</p>
               )}
               {loginError && <p className="text-red-500 p-3">{loginError}</p>}
+              <p>
+                Don't have an account? Please{" "}
+                <Link to="/register" className="underline">
+                  Register
+                </Link>
+              </p>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { Link } from "react-router-dom";
 import auth from "../../firebase/firebase.config";
 
 const Register = () => {
@@ -30,8 +31,7 @@ const Register = () => {
 
     // create user
     createUserWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        console.log(res.user);
+      .then(() => {
         setRegisterSuccess("User created successfully!");
       })
       .catch((error) => {
@@ -80,13 +80,16 @@ const Register = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-[13px] top-[52px]"
                 >
-                  {showPassword ? <BsEye /> : <BsEyeSlash />}
+                  {showPassword ? <BsEyeSlash /> : <BsEye />}
                 </span>
               </div>
               <div className="mt-3">
                 <input type="checkbox" name="terms" id="terms" required />
                 <label htmlFor="terms" className="ml-1">
-                  I accept the <a href="#">terms and conditions</a>
+                  I accept the{" "}
+                  <Link to="#" className="underline">
+                    terms and conditions
+                  </Link>
                 </label>
               </div>
               <div className="form-control mt-6">
@@ -100,6 +103,12 @@ const Register = () => {
               {registerError && (
                 <p className="text-red-500 p-3">{registerError}</p>
               )}
+              <p>
+                Already have an account? Please{" "}
+                <Link to="/login" className="underline">
+                  Login
+                </Link>
+              </p>
             </div>
           </div>
         </div>
