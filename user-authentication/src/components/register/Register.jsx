@@ -30,13 +30,10 @@ const Register = () => {
 
     // create user
     createUserWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        const user = res.user;
-        console.log(user);
+      .then(() => {
         setRegisterSuccess("User created successfully!");
       })
       .catch((error) => {
-        console.log(error);
         setRegisterError(error.message);
       });
   };
@@ -45,7 +42,7 @@ const Register = () => {
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Login now!</h1>
+          <h1 className="text-5xl font-bold">Please Register Now!</h1>
           <p className="py-6">
             Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
             excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
@@ -84,6 +81,12 @@ const Register = () => {
                 >
                   {showPassword ? <BsEye /> : <BsEyeSlash />}
                 </span>
+              </div>
+              <div className="mt-3">
+                <input type="checkbox" name="terms" id="terms" required />
+                <label htmlFor="terms" className="ml-1">
+                  I accept the <a href="#">terms and conditions</a>
+                </label>
               </div>
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
