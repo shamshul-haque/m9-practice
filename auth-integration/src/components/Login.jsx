@@ -1,10 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../provider/AuthProvider";
 
 const Login = () => {
-  const { signInUser } = useContext(AuthContext);
+  const { signInUser, signInGoogle } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -12,10 +13,23 @@ const Login = () => {
     const password = e.target.password.value;
     console.log(email, password);
 
-    // sign in user
+    // sign in by user
     signInUser(email, password)
       .then((result) => {
         console.log(result.user);
+        e.target.reset();
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    signInGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -63,15 +77,21 @@ const Login = () => {
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Login</button>
               </div>
-              <div className="mt-3 space-y-2 text-xs md:text-base">
-                <p>
-                  Don't have an account? Please{" "}
-                  <Link to="/registration" className="underline text-blue-600">
-                    Register
-                  </Link>
-                </p>
-              </div>
             </form>
+            <div className="mt-3 space-y-2 text-xs md:text-base">
+              <button
+                onClick={handleGoogleLogin}
+                className="btn btn-secondary w-full"
+              >
+                Login With Google
+              </button>
+              <p>
+                Don't have an account? Please{" "}
+                <Link to="/registration" className="underline text-blue-600">
+                  Register
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
