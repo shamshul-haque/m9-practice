@@ -30,6 +30,9 @@ const Navbar = () => {
       <li>
         <NavLink to="/registration">Registration</NavLink>
       </li>
+      <li>
+        <NavLink to="/orders">Orders</NavLink>
+      </li>
     </>
   );
   return (
@@ -70,7 +73,7 @@ const Navbar = () => {
         {user ? (
           <>
             <span>{user.email}</span>
-            <Link onClick={handleLogOut} className="btn">
+            <Link to="/login" onClick={handleLogOut} className="btn">
               Sign Out
             </Link>
           </>
